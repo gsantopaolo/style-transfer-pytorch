@@ -16,8 +16,9 @@ from tifffile import TIFF, TiffWriter
 import torch
 import torch.multiprocessing as mp
 from tqdm import tqdm
-
-from . import srgb_profile, StyleTransfer, WebInterface
+from style_transfer import StyleTransfer
+srgb_profile = (Path(__file__).resolve().parent / 'sRGB Profile.icc').read_bytes()
+# from . import srgb_profile, StyleTransfer, WebInterface
 
 
 def prof_to_prof(image, src_prof, dst_prof, **kwargs):
@@ -213,7 +214,10 @@ def main():
 
     devices = [torch.device(device) for device in args.devices]
     if not devices:
-        devices = [torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')]
+        if torch.backends.mps.is_available():
+            devices = [torch.device('mps')]
+        else:
+            devices = [torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')]
     if len(set(device.type for device in devices)) != 1:
         print('Devices must all be the same type.')
         sys.exit(1)
@@ -229,6 +233,8 @@ def main():
             props = torch.cuda.get_device_properties(device)
             print(f'GPU {i} type: {props.name} (compute {props.major}.{props.minor})')
             print(f'GPU {i} RAM:', round(props.total_memory / 1024 / 1024), 'MB')
+    if devices[0].type == 'mps':
+        print('using MPS')
 
     end_scale = int(args.end_scale.rstrip('+'))
     if args.end_scale.endswith('+'):

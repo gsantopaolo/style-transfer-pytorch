@@ -1,3 +1,14 @@
+# The Best OSS Style Transfer Implementation I’ve Tried
+The original implementation does not support MPS, a quick fix in this repo and this fantastic implementation 
+also works on MPS.
+If you are intrested in the fix, you can find a post on my blog([my blog](https://genmind.ch/the-best-oss-style-transfer-implementation-ive-tried/))
+
+
+Usage
+```bash
+python3 cli.py images/test/goldengate.jpg images/styles/starry-night.jpg -o images/output/golden-starry.jpg -s 1000
+```
+
 # style-transfer-pytorch
 
 An implementation of neural style transfer ([A Neural Algorithm of Artistic Style](https://arxiv.org/abs/1508.06576)) in PyTorch, supporting CPUs and Nvidia GPUs. It does automatic multi-scale (coarse-to-fine) stylization to produce high-quality high resolution stylizations, even up to print resolution if the GPUs have sufficient memory. If two GPUs are available, they can both be used to increase the maximum resolution. (Using two GPUs is not faster than using one.)

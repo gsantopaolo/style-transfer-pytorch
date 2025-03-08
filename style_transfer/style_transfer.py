@@ -14,8 +14,8 @@ from torch.nn import functional as F
 from torchvision import models, transforms
 from torchvision.transforms import functional as TF
 
-from . import sqrtm
-
+# from . import sqrtm
+import sqrtm
 
 class VGGFeatures(nn.Module):
     poolings = {'max': nn.MaxPool2d, 'average': nn.AvgPool2d, 'l2': partial(nn.LPPool2d, 2)}
